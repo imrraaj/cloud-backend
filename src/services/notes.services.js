@@ -49,12 +49,14 @@ async function getUserToSharedWith(username) {
 async function createSharedNote({ accesser, accessId, postId, username }) {
   const note = await prisma.sharedPost.create({
     data: {
+      username,
       accesser,
       accessId,
       postId,
-      username,
     },
   });
+
+  return note;
 }
 
 async function getIdsSharedWithMe({ accessId }) {

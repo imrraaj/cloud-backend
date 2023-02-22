@@ -127,7 +127,7 @@ async function shareNote(req, res) {
     const sharedNote = await NoteService.createSharedNote({
       accessId: user.id,
       postId: sharedPostData.data.postId,
-      username: sharedPostData.data.username,
+      username: req.body.username,
     });
 
     res.json({ status: true });
