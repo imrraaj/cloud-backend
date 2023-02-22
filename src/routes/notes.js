@@ -9,6 +9,7 @@ router.put("/edit/:id", NotesController.updateSingleNote);
 router.delete("/delete/:id", NotesController.deleteSingleNote);
 router.post("/share", NotesController.shareNote);
 router.get("/shared-with-me", NotesController.getPostsSharedWithMe);
+router.post("/shared-post-info", NotesController.sharedNoteInfo);
 router.post("/unshare", NotesController.unshareNote);
 export default router;
 // import express, { Router } from "express";

@@ -46,12 +46,13 @@ async function getUserToSharedWith(username) {
   return user;
 }
 
-async function createSharedNote({ accesser, accessId, postId }) {
+async function createSharedNote({ accesser, accessId, postId, username }) {
   const note = await prisma.sharedPost.create({
     data: {
       accesser,
       accessId,
       postId,
+      username,
     },
   });
 }
@@ -95,6 +96,18 @@ async function getPostsSharedWithMe({ ids }) {
 
   return data;
 }
+async function getUsersPostisSharedWith({ postId }) {
+  const data = await prisma.sharedPost.findMany({
+    where: {
+      postId,
+    },
+  });
+
+  return data.map((shared) => shared.username);
+  // data[0].username;
+
+  // return data;
+}
 
 export {
   createNote,
@@ -108,4 +121,5 @@ export {
   getIdsSharedWithMe,
   getSharedPostByIdAndAccessorId,
   deleteSharedPostByIdAndAccessorId,
+  getUsersPostisSharedWith,
 };

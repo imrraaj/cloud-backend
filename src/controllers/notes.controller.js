@@ -127,6 +127,7 @@ async function shareNote(req, res) {
     const sharedNote = await NoteService.createSharedNote({
       accessId: user.id,
       postId: sharedPostData.data.postId,
+      username: sharedPostData.data.username,
     });
 
     res.json({ status: true });
@@ -192,6 +193,27 @@ async function unshareNote(req, res) {
     }
   }
 }
+
+async function sharedNoteInfo(req, res) {
+  try {
+    const userId = req.user.id;
+    const postId = req.body.postId;
+
+    const note = await NoteService.getSingleNoteById(postId, userId);
+    if (!note) throw new Error("Note not found");
+    if (note.userId !== userId) throw new Error("You do not own this Note!!");
+
+    const usersHavingAccessToPost = await NoteService.getUsersPostisSharedWith({
+      postId,
+    });
+    return res.json({ status: true, data: usersHavingAccessToPost });
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.name, error.message);
+      res.json({ status: false, message: error.message });
+    }
+  }
+}
 export {
   getAllNotes,
   getSingleNote,
@@ -201,4 +223,5 @@ export {
   shareNote,
   getPostsSharedWithMe,
   unshareNote,
+  sharedNoteInfo,
 };
